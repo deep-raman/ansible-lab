@@ -1,0 +1,24 @@
+- hosts: all
+  
+  tasks:
+    - name: Update redhat
+      import_tasks: update-redhatfamily.yaml
+      when: ansible_os_family == 'RedHat'
+    
+    - name: Update debian
+      import_tasks: update-debianfamily.yaml
+      when: ansible_os_family == 'Debian'
+
+    - name: Reboot hosts after update
+      shell: "sleep 5 && reboot"
+      async: 1
+      poll: 0
+      when: centos_result is changed and ansible_os_family == 'RedHat' or debian_result is changed and ansible_os_family == 'Debian'
+
+    - name: HOST | Waiting server reboot
+      wait_for_connection:
+        connect_timeout: 60
+        sleep: 5
+        delay: 5
+        timeout: 300
+      when: centos_result is changed or debian_result is changed
