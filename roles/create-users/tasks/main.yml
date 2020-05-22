@@ -1,0 +1,21 @@
+---
+# tasks file for create-users
+- name: Create group
+  group:
+    name: "{{ group }}"
+    state: present
+
+- name: Create user opertor1
+  user:
+    name: "{{ item.username }}"
+    shell: "{{ item.shell }}"
+    comment: "{{ item.comment }}"
+    state: present
+  with_items: "{{ users }}"
+
+- name: Add authorized keys
+  authorized_key:
+    user: "{{ item.username }}"
+    state: present
+    key: "{{ lookup('file', '{{ authorized_key }}') }}"
+  with_items: "{{ users }}"

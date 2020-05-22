@@ -1,0 +1,8 @@
+---
+# tasks file for secure-machine
+- name: Set permission to /root folder
+  file:
+    path: /root
+    state: directory
+    mode: 0700
+

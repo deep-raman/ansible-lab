@@ -1,0 +1,15 @@
+---
+# defaults file for create-users
+users:
+  - username: ironman
+    comment: "Ironman user"
+    shell: "/bin/bash"
+  - username: capamerica
+    comment: "Captain America user"
+    shell: "/bin/false"
+  - username: thor
+    shell: "/bin/sh"
+    comment: "Thor user"
+
+group: avengers
+authorized_key: /root/vagrant-lab/id_ed25519.pub
