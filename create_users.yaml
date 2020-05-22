@@ -1,9 +1,15 @@
 - hosts: all
   vars:
     users:
-      - batman
-      - superman
-      - wonderwoman
+      - username: batman
+        comment: "Batman user"
+        shell: "/bin/bash"
+      - username: superman
+        comment: "Superman user"
+        shell: "/bin/false"
+      - username: wonderwoman
+        shell: "/bin/sh"
+        comment: "Wonderwoman user"
     group: justice-league
 
   tasks:
@@ -14,16 +20,17 @@
 
     - name: Create user opertor1
       user:
-        name: "{{ item }}"
-        shell: /bin/bash
+        name: "{{ item.username }}"
+        shell: "{{ item.shell }}"
+        comment: "{{ item.comment }}"
         state: present
       with_items: "{{ users }}"
    
     - name: Add authorized keys
       authorized_key:
-        user: "{{ item }}"
+        user: "{{ item.username }}"
         state: present
-        key: "{{ lookup('file', '../vagrant-lab/id_ed25519.pub') }}"
+        key: "{{ lookup('file', '../../vagrant-lab/id_ed25519.pub') }}"
       with_items: "{{ users }}"
 
 
