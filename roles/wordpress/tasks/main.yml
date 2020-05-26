@@ -1,0 +1,27 @@
+---
+
+- name: Download wordpress
+  get_url:
+    url: https://wordpress.org/latest.tar.gz
+    dest: /tmp
+
+- name: delete default index.html
+  file:
+    path: /var/www/html/index.html
+    state: absent
+
+- name: Extract wordpress tar
+  unarchive:
+    src: "/tmp/wordpress-5.4.1.tar.gz"
+    dest: /var/www/html/
+    remote_src: yes
+    extra_opts: [--strip-components=1 ]
+
+- name: Set permissions
+  file:
+    path: /var/www/html/
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0755
+    recurse: yes
