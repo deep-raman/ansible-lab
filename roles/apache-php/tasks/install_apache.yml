@@ -1,0 +1,13 @@
+---
+
+- name: Install apache and other required packages
+  apt:
+    name: "{{ apache_packages }}"
+    state: present
+    update_cache: yes
+
+- name: Restart and enable apache
+  systemd:
+    name: apache2
+    state: restarted
+    enabled: yes

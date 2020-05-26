@@ -1,2 +1,16 @@
 ---
 # vars file for apache-php
+php_packages:
+  - php
+  - php-common
+  - php-mysql
+  - php-gd
+  - php-xml
+  - php-intl
+  - php-redis
+
+apache_packages:
+  - apache2
+  - libapache2-mod-php
+  - wget
+  - ca-certificates

@@ -1,4 +1,11 @@
 ---
-# tasks file for apache-php
 
+- import_tasks: install_php.yml
+  tags:
+    - install
+    - install_php
 
+- import_tasks: install_apache.yml
+  tags:
+    - install
+    - install_apache
