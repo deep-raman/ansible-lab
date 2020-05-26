@@ -1,15 +1,33 @@
 ---
 # tasks file for mysql
+
+- name: Install required packages
+  yum:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - epel-release
+      - python2-pip
+      - python2-PyMySQL
+
+
+- name: install pexpect using pip
+  pip:
+    name: pexpect
+
 - name: Download mysql 5.7 repository
   yum:
     name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
     state: present
 
+- name: enable mysql version 5.7
+  command: yum-config-manager --enable mysql57-community
+
 - name: Install mysql
   yum:
     name: mysql-server
     state: present
-    update_cache: yes
 
 - name: Enable and start mysql
   systemd:
@@ -17,5 +35,34 @@
     state: started
     enabled: yes
 
+- name: Secure mysql installation
+  expect:
+    command: mysql_secure_installation
+    responses:
+      'Enter current password for root \(enter for none\): ': ''
+      'Set root password\? \[Y\/n\] ': 'Y'
+      'New password:': 'myrootpassword'
+      'Re-enter new password:': 'myrootpassword'
+      'Remove anonymous users\? \[Y\/n\] ': 'Y'
+      'Disallow root login remotely\? \[Y\/n\] ': 'Y'
+      'Remove test database and access to it\? \[Y\/n\] ': 'Y'
+      'Reload privilege tables now\? \[Y\/n\] ': 'Y'
+    echo: yes
+    
 
+- name: Create wordpress database
+  mysql_db:
+    name: wordpress
+    state: present
+    login_user: root
+    login_password: myrootpassword
 
+- name: Create wordpress user
+  mysql_user:
+    name: wordpress
+    password: wordpress
+    priv: 'wordpress.*:ALL'
+    state: present
+    host: localhost
+    login_user: root
+    login_password: myrootpassword
