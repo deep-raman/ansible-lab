@@ -1,0 +1,18 @@
+- hosts: all 
+  roles:
+    - { role: update }
+    - { role: secure-machine }
+    - { role: create-users }
+
+  tasks:
+    - name: import apache playbook
+      import_playbook:
+        name: install_apache.yaml
+      when: ansible_os_family == "Debian"
+    
+    - name: import mysql installation
+      import_playbook:
+        name: install_mysql.yaml
+      when: ansible_os_family == "RedHat"
+      tags: installmysql
+
