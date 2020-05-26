@@ -11,3 +11,6 @@
   when: ansible_os_family == "RedHat"
   tags: installmysql
 
+- import_playbook: wordpress.yaml
+  when: ansible_os_family == "Debian"
+  tags: installwordpress
