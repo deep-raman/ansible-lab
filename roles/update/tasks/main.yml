@@ -16,8 +16,8 @@
 
 - name: HOST | Waiting server reboot
   wait_for_connection:
-  connect_timeout: 60
-  sleep: 5
-  delay: 5
-  timeout: 300
+    connect_timeout: 60
+    sleep: 5
+    delay: 5
+    timeout: 300
   when: centos_result is changed or debian_result is changed
