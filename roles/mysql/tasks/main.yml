@@ -1,2 +1,21 @@
 ---
 # tasks file for mysql
+- name: Download mysql 5.7 repository
+  yum:
+    name: http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
+    state: present
+
+- name: Install mysql
+  yum:
+    name: mysql-server
+    state: present
+    update_cache: yes
+
+- name: Enable and start mysql
+  systemd:
+    name: mysqld
+    state: started
+    enabled: yes
+
+
+
